@@ -27,4 +27,6 @@ Também é possível enviar uma pasta inteira pelo GitHub Desktop ou pelo Git, m
 
 A aprovação é marcada no navegador e permanece salva nesse navegador para os arquivos publicados. A numeração ajuda a referenciar os sons nos chats de desenvolvimento.
 
+O botão **Copiar aprovados** gera uma mensagem pronta com as seções, a numeração e os nomes dos sons aprovados, copiando tudo para a área de transferência para você tomar nota.
+
 Arquivos adicionados pelo botão da própria página são apenas temporários: servem para testar antes de publicar e não são enviados automaticamente ao GitHub. Isso evita que a página tenha permissão para alterar o repositório.
