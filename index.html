@@ -6,14 +6,14 @@
   <meta name="description" content="Painel para testar e aprovar sons para jogos.">
   <title>Sound Testing</title>
   <style>
-    :root { color-scheme: dark; --bg:#10131a; --panel:#191e29; --panel-2:#202735; --line:#313a4c; --text:#f4f7fb; --muted:#aab4c5; --accent:#71d3ff; --good:#78e3a1; --warn:#ffd36e; }
+    :root { color-scheme: dark; --bg:#10131a; --panel:#191e29; --panel-2:#202735; --line:#313a4c; --text:#f4f7fb; --muted:#aab4c5; --accent:#71d3ff; --good:#78e3a1; }
     * { box-sizing:border-box; }
     body { margin:0; min-height:100vh; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(circle at top right,#263b50 0,#10131a 42%); color:var(--text); }
     .wrap { width:min(1120px,calc(100% - 32px)); margin:auto; }
     header { padding:42px 0 28px; border-bottom:1px solid var(--line); }
     .eyebrow { color:var(--accent); font-size:.82rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
-    h1 { margin:8px 0 8px; font-size:clamp(2rem,5vw,3.5rem); line-height:1; }
-    .intro { max-width:680px; margin:0; color:var(--muted); font-size:1.05rem; }
+    h1 { margin:8px 0; font-size:clamp(2rem,5vw,3.5rem); line-height:1; }
+    .intro { max-width:740px; margin:0; color:var(--muted); font-size:1.05rem; }
     main { padding:30px 0 54px; }
     .toolbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; margin-bottom:24px; }
     .toolbar p { margin:0; color:var(--muted); }
@@ -51,38 +51,66 @@
   <header><div class="wrap">
     <div class="eyebrow">Sound Testing</div>
     <h1>Banco de sons</h1>
-    <p class="intro">Carregue, ouça e marque os arquivos aprovados antes de integrá-los aos jogos. A numeração identifica cada arquivo nos chats de desenvolvimento.</p>
+    <p class="intro">Os arquivos de áudio publicados nas pastas do repositório aparecem aqui automaticamente. Também é possível testar arquivos temporários antes de publicá-los.</p>
   </div></header>
   <main class="wrap">
-    <div class="toolbar"><p id="summary" aria-live="polite">Nenhum arquivo carregado.</p><button id="clearAll" type="button">Limpar tudo</button></div>
+    <div class="toolbar"><p id="summary" aria-live="polite">Carregando sons publicados…</p><button id="clearAll" type="button">Limpar temporários</button></div>
     <div class="sections" id="sections"></div>
   </main>
-  <footer class="wrap">Os arquivos ficam salvos somente neste navegador. Para compartilhar os sons com outra pessoa, será necessário subir uma nova cópia ou adicionar os arquivos ao repositório.</footer>
+  <footer class="wrap">Sons do repositório são carregados pelo GitHub Pages. Arquivos adicionados pelo painel ficam somente neste navegador e nesta sessão.</footer>
   <script>
-    const sectionNames = ['Efeitos e ações','Ambiente e cenário','Interface e feedback','Música e outros'];
-    const state = sectionNames.map(() => []);
-    const formatBytes = bytes => { if (!bytes) return '0 B'; const units=['B','KB','MB','GB']; const i=Math.min(Math.floor(Math.log(bytes)/Math.log(1024)),units.length-1); return `${(bytes/1024**i).toFixed(i?1:0)} ${units[i]}`; };
+    const REPO_TREE_URL = 'https://api.github.com/repos/concego/sound-testing/git/trees/main?recursive=1';
+    const RAW_BASE_URL = 'https://raw.githubusercontent.com/concego/sound-testing/main/';
+    const sectionData = [
+      { name: 'Efeitos e ações', folder: 'sounds/01-efeitos-acoes/' },
+      { name: 'Ambiente e cenário', folder: 'sounds/02-ambiente-cenario/' },
+      { name: 'Interface e feedback', folder: 'sounds/03-interface-feedback/' },
+      { name: 'Música e outros', folder: 'sounds/04-musica-outros/' }
+    ];
+    const state = sectionData.map(() => []);
+    const audioExtensions = /\.(mp3|wav|ogg|m4a|aac|flac|aiff?)$/i;
+    const approvalKey = 'sound-testing-approved-v1';
+    const approvedPaths = new Set(JSON.parse(localStorage.getItem(approvalKey) || '[]'));
     const esc = text => text.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const formatBytes = bytes => { if (!bytes) return ''; const units=['B','KB','MB','GB']; const i=Math.min(Math.floor(Math.log(bytes)/Math.log(1024)),units.length-1); return `${(bytes/1024**i).toFixed(i?1:0)} ${units[i]}`; };
+    const fileUrl = path => RAW_BASE_URL + path.split('/').map(encodeURIComponent).join('/');
+    function saveApprovals() { localStorage.setItem(approvalKey, JSON.stringify([...approvedPaths])); }
     function render() {
-      const root=document.querySelector('#sections'); let total=0, approved=0;
-      root.innerHTML=sectionNames.map((name,si)=>{
-        total+=state[si].length; approved+=state[si].filter(f=>f.approved).length;
-        const files=state[si].length ? state[si].map((f,fi)=>`<div class="file"><span class="file-number">${si+1}.${fi+1}</span><div class="file-info"><span class="file-name" title="${esc(f.name)}">${esc(f.name)}</span><span class="file-meta">${formatBytes(f.size)} · ${f.type||'arquivo de áudio'}</span></div><div class="file-actions"><button class="play" type="button" data-s="${si}" data-f="${fi}" aria-label="Reproduzir ${si+1}.${fi+1} ${esc(f.name)}">▶ Ouvir</button><button class="approve ${f.approved?'selected':''}" type="button" data-s="${si}" data-f="${fi}" aria-pressed="${f.approved}" aria-label="${f.approved?'Desmarcar':'Marcar'} aprovação de ${si+1}.${fi+1}">${f.approved?'✓ Aprovado':'Aprovar'}</button><button class="remove" type="button" data-s="${si}" data-f="${fi}" aria-label="Remover ${si+1}.${fi+1} ${esc(f.name)}">×</button></div></div>`).join('') : '<p class="empty">Nenhum arquivo nesta seção.</p>';
-        return `<section class="section" aria-labelledby="section-${si}"><div class="section-head"><div><span class="section-number">${si+1}</span><h2 id="section-${si}">${name}</h2></div><span class="count">${state[si].length} arquivo${state[si].length===1?'':'s'}</span></div><label class="dropzone" data-s="${si}"><input type="file" accept="audio/*" multiple data-s="${si}"><span><strong>Adicionar arquivos de áudio</strong>clique aqui ou arraste os arquivos</span></label><div class="files">${files}</div></section>`;
+      const root=document.querySelector('#sections'); let total=0, approved=0, temporary=0;
+      root.innerHTML=sectionData.map((section,si)=>{
+        total+=state[si].length; approved+=state[si].filter(f=>f.approved).length; temporary+=state[si].filter(f=>f.source==='local').length;
+        const files=state[si].length ? state[si].map((f,fi)=>`<div class="file"><span class="file-number">${si+1}.${fi+1}</span><div class="file-info"><span class="file-name" title="${esc(f.name)}">${esc(f.name)}</span><span class="file-meta">${f.source==='repo'?'Publicado no repo':'Temporário'}${f.size?' · '+formatBytes(f.size):''}${f.type?' · '+esc(f.type):''}</span></div><div class="file-actions"><button class="play" type="button" data-s="${si}" data-f="${fi}" aria-label="Reproduzir ${si+1}.${fi+1} ${esc(f.name)}">▶ Ouvir</button><button class="approve ${f.approved?'selected':''}" type="button" data-s="${si}" data-f="${fi}" aria-pressed="${f.approved}" aria-label="${f.approved?'Desmarcar':'Marcar'} aprovação de ${si+1}.${fi+1}">${f.approved?'✓ Aprovado':'Aprovar'}</button>${f.source==='local'?`<button class="remove" type="button" data-s="${si}" data-f="${fi}" aria-label="Remover ${si+1}.${fi+1} ${esc(f.name)}">×</button>`:''}</div></div>`).join('') : '<p class="empty">Nenhum som publicado nesta pasta.</p>';
+        return `<section class="section" aria-labelledby="section-${si}"><div class="section-head"><div><span class="section-number">${si+1}</span><h2 id="section-${si}">${section.name}</h2></div><span class="count">${state[si].length} arquivo${state[si].length===1?'':'s'}</span></div><label class="dropzone" data-s="${si}"><input type="file" accept="audio/*" multiple data-s="${si}"><span><strong>Testar arquivos temporários</strong>clique aqui ou arraste os arquivos</span></label><div class="files">${files}</div></section>`;
       }).join('');
-      document.querySelector('#summary').textContent=total ? `${total} arquivo${total===1?'':'s'} carregado${total===1?'':'s'} · ${approved} aprovado${approved===1?'':'s'}` : 'Nenhum arquivo carregado.';
+      document.querySelector('#summary').textContent=total ? `${total} arquivo${total===1?'':'s'} carregado${total===1?'':'s'} · ${approved} aprovado${approved===1?'':'s'} · ${temporary} temporário${temporary===1?'':'s'}` : 'Nenhum som publicado ainda.';
       bind();
     }
-    function addFiles(si, fileList) { [...fileList].filter(f=>f.type.startsWith('audio/') || /\.(mp3|wav|ogg|m4a|aac|flac|aiff?)$/i.test(f.name)).forEach(file=>state[si].push({name:file.name,size:file.size,type:file.type,url:URL.createObjectURL(file),approved:false})); render(); }
+    async function loadRepositorySounds() {
+      try {
+        const response=await fetch(REPO_TREE_URL, {headers:{Accept:'application/vnd.github+json'}});
+        if(!response.ok) throw new Error('Não foi possível consultar o repositório.');
+        const tree=(await response.json()).tree || [];
+        sectionData.forEach((section,si)=>{
+          state[si].filter(f=>f.source==='repo').forEach(f=>URL.revokeObjectURL(f.url || ''));
+          state[si]=tree.filter(item=>item.type==='blob' && item.path.startsWith(section.folder) && audioExtensions.test(item.path)).sort((a,b)=>a.path.localeCompare(b.path,'pt-BR')).map(item=>({name:item.path.slice(section.folder.length),path:item.path,url:fileUrl(item.path),source:'repo',approved:approvedPaths.has(item.path),type:'audio'}));
+        });
+        render();
+      } catch(error) {
+        document.querySelector('#summary').textContent='Não foi possível carregar os sons publicados agora; os arquivos temporários continuam disponíveis.';
+        render();
+      }
+    }
+    function addFiles(si,fileList) { [...fileList].filter(f=>f.type.startsWith('audio/') || audioExtensions.test(f.name)).forEach(file=>state[si].push({name:file.name,size:file.size,type:file.type,url:URL.createObjectURL(file),source:'local',approved:false})); render(); }
     function bind() {
       document.querySelectorAll('input[type=file]').forEach(input=>input.addEventListener('change',e=>addFiles(+e.target.dataset.s,e.target.files)));
       document.querySelectorAll('.dropzone').forEach(zone=>{ zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')}); zone.addEventListener('dragleave',()=>zone.classList.remove('dragover')); zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');addFiles(+zone.dataset.s,e.dataTransfer.files)}); });
       document.querySelectorAll('.play').forEach(b=>b.addEventListener('click',()=>{ const f=state[+b.dataset.s][+b.dataset.f]; document.querySelectorAll('audio').forEach(a=>a.remove()); const audio=new Audio(f.url); audio.play(); b.textContent='⏸ Tocando'; audio.onended=()=>b.textContent='▶ Ouvir'; }));
-      document.querySelectorAll('.approve').forEach(b=>b.addEventListener('click',()=>{const f=state[+b.dataset.s][+b.dataset.f];f.approved=!f.approved;render();}));
+      document.querySelectorAll('.approve').forEach(b=>b.addEventListener('click',()=>{const f=state[+b.dataset.s][+b.dataset.f];f.approved=!f.approved;if(f.source==='repo'&&f.path){f.approved?approvedPaths.add(f.path):approvedPaths.delete(f.path);saveApprovals();}render();}));
       document.querySelectorAll('.remove').forEach(b=>b.addEventListener('click',()=>{const f=state[+b.dataset.s].splice(+b.dataset.f,1)[0];URL.revokeObjectURL(f.url);render();}));
     }
-    document.querySelector('#clearAll').addEventListener('click',()=>{if(state.some(s=>s.length) && confirm('Remover todos os arquivos carregados?')) {state.flat().forEach(f=>URL.revokeObjectURL(f.url)); state.forEach(s=>s.splice(0)); render();}});
+    document.querySelector('#clearAll').addEventListener('click',()=>{if(state.some(s=>s.some(f=>f.source==='local')) && confirm('Remover todos os arquivos temporários?')) {state.forEach(s=>{for(let i=s.length-1;i>=0;i--) if(s[i].source==='local'){URL.revokeObjectURL(s[i].url);s.splice(i,1);}});render();}});
     render();
+    loadRepositorySounds();
   </script>
 </body>
 </html>

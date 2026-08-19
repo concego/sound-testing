@@ -1,12 +1,30 @@
 # Sound Testing
 
-Página para testar e organizar arquivos de áudio antes de integrá-los aos jogos.
+Página pública para testar, organizar e aprovar sons antes de integrá-los aos jogos.
 
-## Como usar
+## Organização das pastas
 
-1. Abra a página publicada pelo GitHub Pages.
-2. Adicione arquivos de áudio em uma das quatro seções.
-3. Use a numeração exibida (`seção.arquivo`) para se referir aos sons nos chats de desenvolvimento — por exemplo, `2.3`.
-4. Reproduza os arquivos e marque os aprovados.
+A página lê automaticamente os arquivos de áudio publicados nestas pastas:
 
-Os arquivos carregados pela interface ficam apenas na memória do navegador e não são enviados automaticamente ao GitHub. O navegador precisa manter a aba aberta para continuar reproduzindo-os.
+- `sounds/01-efeitos-acoes/` → seção 1
+- `sounds/02-ambiente-cenario/` → seção 2
+- `sounds/03-interface-feedback/` → seção 3
+- `sounds/04-musica-outros/` → seção 4
+
+Os arquivos dentro de cada pasta são ordenados pelo nome. A numeração exibida no painel segue o formato `seção.arquivo`; por exemplo, o terceiro arquivo da pasta 2 aparece como `2.3`.
+
+## Como adicionar uma pasta ou som
+
+1. No GitHub, abra o repositório e entre em **Add file → Create new file**.
+2. No campo do nome, digite o caminho completo, por exemplo: `sounds/01-efeitos-acoes/.gitkeep`.
+3. Faça o commit. Isso cria a pasta.
+4. Entre na pasta criada e use **Add file → Upload files** para enviar os sons.
+5. Depois do commit, o GitHub Pages publica a atualização e a página carrega os novos arquivos automaticamente.
+
+Também é possível enviar uma pasta inteira pelo GitHub Desktop ou pelo Git, mantendo esses nomes de diretório.
+
+## Aprovação
+
+A aprovação é marcada no navegador e permanece salva nesse navegador para os arquivos publicados. A numeração ajuda a referenciar os sons nos chats de desenvolvimento.
+
+Arquivos adicionados pelo botão da própria página são apenas temporários: servem para testar antes de publicar e não são enviados automaticamente ao GitHub. Isso evita que a página tenha permissão para alterar o repositório.
