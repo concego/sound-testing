@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Painel para testar e aprovar sons para jogos.">
+  <title>Sound Testing</title>
+  <style>
+    :root { color-scheme: dark; --bg:#10131a; --panel:#191e29; --panel-2:#202735; --line:#313a4c; --text:#f4f7fb; --muted:#aab4c5; --accent:#71d3ff; --good:#78e3a1; --warn:#ffd36e; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(circle at top right,#263b50 0,#10131a 42%); color:var(--text); }
+    .wrap { width:min(1120px,calc(100% - 32px)); margin:auto; }
+    header { padding:42px 0 28px; border-bottom:1px solid var(--line); }
+    .eyebrow { color:var(--accent); font-size:.82rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+    h1 { margin:8px 0 8px; font-size:clamp(2rem,5vw,3.5rem); line-height:1; }
+    .intro { max-width:680px; margin:0; color:var(--muted); font-size:1.05rem; }
+    main { padding:30px 0 54px; }
+    .toolbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; margin-bottom:24px; }
+    .toolbar p { margin:0; color:var(--muted); }
+    .button, button { border:1px solid var(--line); border-radius:10px; padding:10px 15px; background:var(--panel-2); color:var(--text); font:inherit; font-weight:700; cursor:pointer; }
+    .button:hover, button:hover { border-color:var(--accent); background:#293449; }
+    .button:focus-visible, button:focus-visible, input:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+    .sections { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+    .section { display:flex; flex-direction:column; min-height:315px; padding:22px; border:1px solid var(--line); border-radius:16px; background:rgba(25,30,41,.94); box-shadow:0 12px 28px #0002; }
+    .section-head { display:flex; align-items:flex-start; justify-content:space-between; gap:15px; margin-bottom:16px; }
+    .section-number { display:inline-grid; place-items:center; width:40px; height:40px; margin-right:11px; border-radius:11px; background:var(--accent); color:#0d1820; font-size:1.2rem; font-weight:900; }
+    h2 { display:inline; font-size:1.25rem; }
+    .count { color:var(--muted); font-size:.9rem; white-space:nowrap; }
+    .dropzone { display:grid; place-items:center; min-height:105px; padding:18px; border:1px dashed #68778d; border-radius:12px; background:#111720; text-align:center; color:var(--muted); cursor:pointer; }
+    .dropzone:hover, .dropzone.dragover { border-color:var(--accent); background:#172532; color:var(--text); }
+    .dropzone strong { display:block; margin-bottom:5px; color:var(--text); }
+    .dropzone input { position:absolute; width:1px; height:1px; opacity:0; }
+    .files { display:grid; gap:9px; margin-top:17px; }
+    .empty { margin:0; color:#7f8a9c; font-size:.92rem; }
+    .file { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px; padding:10px; border:1px solid var(--line); border-radius:10px; background:var(--panel-2); }
+    .file-number { color:var(--accent); font-weight:900; }
+    .file-info { min-width:0; }
+    .file-name { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:700; }
+    .file-meta { display:block; margin-top:3px; color:var(--muted); font-size:.78rem; }
+    .file-actions { display:flex; gap:6px; }
+    .file-actions button { padding:7px 9px; font-size:.86rem; }
+    .approve { border-color:#397657; color:var(--good); }
+    .approve.selected { background:#1d5639; color:#fff; }
+    .remove { color:#ff9c9c; }
+    footer { padding:18px 0 35px; color:var(--muted); font-size:.9rem; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @media (max-width:720px) { .sections { grid-template-columns:1fr; } .section { min-height:0; } .file { grid-template-columns:auto 1fr; } .file-actions { grid-column:2; } }
+  </style>
+</head>
+<body>
+  <header><div class="wrap">
+    <div class="eyebrow">Sound Testing</div>
+    <h1>Banco de sons</h1>
+    <p class="intro">Carregue, ouça e marque os arquivos aprovados antes de integrá-los aos jogos. A numeração identifica cada arquivo nos chats de desenvolvimento.</p>
+  </div></header>
+  <main class="wrap">
+    <div class="toolbar"><p id="summary" aria-live="polite">Nenhum arquivo carregado.</p><button id="clearAll" type="button">Limpar tudo</button></div>
+    <div class="sections" id="sections"></div>
+  </main>
+  <footer class="wrap">Os arquivos ficam salvos somente neste navegador. Para compartilhar os sons com outra pessoa, será necessário subir uma nova cópia ou adicionar os arquivos ao repositório.</footer>
+  <script>
+    const sectionNames = ['Efeitos e ações','Ambiente e cenário','Interface e feedback','Música e outros'];
+    const state = sectionNames.map(() => []);
+    const formatBytes = bytes => { if (!bytes) return '0 B'; const units=['B','KB','MB','GB']; const i=Math.min(Math.floor(Math.log(bytes)/Math.log(1024)),units.length-1); return `${(bytes/1024**i).toFixed(i?1:0)} ${units[i]}`; };
+    const esc = text => text.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function render() {
+      const root=document.querySelector('#sections'); let total=0, approved=0;
+      root.innerHTML=sectionNames.map((name,si)=>{
+        total+=state[si].length; approved+=state[si].filter(f=>f.approved).length;
+        const files=state[si].length ? state[si].map((f,fi)=>`<div class="file"><span class="file-number">${si+1}.${fi+1}</span><div class="file-info"><span class="file-name" title="${esc(f.name)}">${esc(f.name)}</span><span class="file-meta">${formatBytes(f.size)} · ${f.type||'arquivo de áudio'}</span></div><div class="file-actions"><button class="play" type="button" data-s="${si}" data-f="${fi}" aria-label="Reproduzir ${si+1}.${fi+1} ${esc(f.name)}">▶ Ouvir</button><button class="approve ${f.approved?'selected':''}" type="button" data-s="${si}" data-f="${fi}" aria-pressed="${f.approved}" aria-label="${f.approved?'Desmarcar':'Marcar'} aprovação de ${si+1}.${fi+1}">${f.approved?'✓ Aprovado':'Aprovar'}</button><button class="remove" type="button" data-s="${si}" data-f="${fi}" aria-label="Remover ${si+1}.${fi+1} ${esc(f.name)}">×</button></div></div>`).join('') : '<p class="empty">Nenhum arquivo nesta seção.</p>';
+        return `<section class="section" aria-labelledby="section-${si}"><div class="section-head"><div><span class="section-number">${si+1}</span><h2 id="section-${si}">${name}</h2></div><span class="count">${state[si].length} arquivo${state[si].length===1?'':'s'}</span></div><label class="dropzone" data-s="${si}"><input type="file" accept="audio/*" multiple data-s="${si}"><span><strong>Adicionar arquivos de áudio</strong>clique aqui ou arraste os arquivos</span></label><div class="files">${files}</div></section>`;
+      }).join('');
+      document.querySelector('#summary').textContent=total ? `${total} arquivo${total===1?'':'s'} carregado${total===1?'':'s'} · ${approved} aprovado${approved===1?'':'s'}` : 'Nenhum arquivo carregado.';
+      bind();
+    }
+    function addFiles(si, fileList) { [...fileList].filter(f=>f.type.startsWith('audio/') || /\.(mp3|wav|ogg|m4a|aac|flac|aiff?)$/i.test(f.name)).forEach(file=>state[si].push({name:file.name,size:file.size,type:file.type,url:URL.createObjectURL(file),approved:false})); render(); }
+    function bind() {
+      document.querySelectorAll('input[type=file]').forEach(input=>input.addEventListener('change',e=>addFiles(+e.target.dataset.s,e.target.files)));
+      document.querySelectorAll('.dropzone').forEach(zone=>{ zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')}); zone.addEventListener('dragleave',()=>zone.classList.remove('dragover')); zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');addFiles(+zone.dataset.s,e.dataTransfer.files)}); });
+      document.querySelectorAll('.play').forEach(b=>b.addEventListener('click',()=>{ const f=state[+b.dataset.s][+b.dataset.f]; document.querySelectorAll('audio').forEach(a=>a.remove()); const audio=new Audio(f.url); audio.play(); b.textContent='⏸ Tocando'; audio.onended=()=>b.textContent='▶ Ouvir'; }));
+      document.querySelectorAll('.approve').forEach(b=>b.addEventListener('click',()=>{const f=state[+b.dataset.s][+b.dataset.f];f.approved=!f.approved;render();}));
+      document.querySelectorAll('.remove').forEach(b=>b.addEventListener('click',()=>{const f=state[+b.dataset.s].splice(+b.dataset.f,1)[0];URL.revokeObjectURL(f.url);render();}));
+    }
+    document.querySelector('#clearAll').addEventListener('click',()=>{if(state.some(s=>s.length) && confirm('Remover todos os arquivos carregados?')) {state.flat().forEach(f=>URL.revokeObjectURL(f.url)); state.forEach(s=>s.splice(0)); render();}});
+    render();
+  </script>
+</body>
+</html>
