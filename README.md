@@ -47,3 +47,21 @@ A música `02-bosque-natural-forest-fantasy-ccby.mp3` exige atribuição caso se
 - `42-rainha-aranha-teia-sproing.wav` e `43-rainha-aranha-teia-splurt.wav`: Various Sound Effects — CC0: https://opengameart.org/content/various-sound-effects-0
 
 São candidatos para testar os sons do estilingue, impacto, fala do Bravo Novato e lançamento de teia. Ainda não foram integrados ao Booga.
+
+## Candidatos para inimigos da Floresta
+
+### Lobos
+
+- `47-lobo-howl-cc0.ogg`
+- `48-lobo-barking-01-cc0.ogg`
+- `49-lobo-barking-02-cc0.ogg`
+
+Fonte: **80 CC0 creature SFX** — CC0: https://opengameart.org/content/80-cc0-creature-sfx
+
+### Goblins inimigos
+
+- `50-goblin-pack-1-cc0.wav` até `57-goblin-pack-8-cc0.wav`
+
+Fonte: **Goblins Sound Pack** — CC0: https://opengameart.org/content/goblins-sound-pack
+
+Esses arquivos são apenas candidatos para escuta. Ainda não foram integrados ao Booga.
