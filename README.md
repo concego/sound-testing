@@ -30,3 +30,13 @@ A aprovação é marcada no navegador e permanece salva nesse navegador para os 
 O botão **Copiar aprovados** gera uma mensagem pronta com as seções, a numeração e os nomes dos sons aprovados, copiando tudo para a área de transferência para você tomar nota.
 
 Arquivos adicionados pelo botão da própria página são apenas temporários: servem para testar antes de publicar e não são enviados automaticamente ao GitHub. Isso evita que a página tenha permissão para alterar o repositório.
+
+## Candidatos adicionais — Bosque e inimigos
+
+- `sounds/01-efeitos-acoes/30`–`32`: Goblins Sound Pack — CC0: https://opengameart.org/content/goblins-sound-pack
+- `sounds/01-efeitos-acoes/33`–`38`: 80 CC0 creature SFX — CC0: https://opengameart.org/content/80-cc0-creature-sfx
+- `sounds/01-efeitos-acoes/39`–`40`: Monster Sound Pack, Volume 1 — CC0: https://opengameart.org/content/monster-sound-pack-volume-1
+- `sounds/04-musica-outros/01`: Forest Ambience — CC0: https://opengameart.org/content/forest-ambience
+- `sounds/04-musica-outros/02`: Natural Forest Fantasy Music — CC-BY 4.0: https://opengameart.org/content/natural-forest-fantasy-music
+
+A música `02-bosque-natural-forest-fantasy-ccby.mp3` exige atribuição caso seja aprovada e integrada.
