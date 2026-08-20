@@ -40,3 +40,10 @@ Arquivos adicionados pelo botão da própria página são apenas temporários: s
 - `sounds/04-musica-outros/02`: Natural Forest Fantasy Music — CC-BY 4.0: https://opengameart.org/content/natural-forest-fantasy-music
 
 A música `02-bosque-natural-forest-fantasy-ccby.mp3` exige atribuição caso seja aprovada e integrada.
+
+## Candidatos adicionais — especiais e Boss da Floresta
+
+- `41-bravo-estilingue-throw-01.wav`, `44-bravo-estilingue-impact-01.wav`, `45-bravo-estilingue-crackle-01.wav` e `46-bravo-fala-npc-01.wav`: Various Sound Effects — CC0: https://opengameart.org/content/various-sound-effects-0
+- `42-rainha-aranha-teia-sproing.wav` e `43-rainha-aranha-teia-splurt.wav`: Various Sound Effects — CC0: https://opengameart.org/content/various-sound-effects-0
+
+São candidatos para testar os sons do estilingue, impacto, fala do Bravo Novato e lançamento de teia. Ainda não foram integrados ao Booga.
