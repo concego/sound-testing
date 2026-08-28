@@ -40,10 +40,18 @@ License: CC0. The page says credit is appreciated but not mandatory.
 
 - `18-oga-paper-ripped-1-cc0.mp3` — `paper_ripped_-_1.mp3`
 
-### qubodup — Door Open, Door Close Set
+### Iwan Gabovitch / qubodup — Door Open, Door Close
 
-Source: https://opengameart.org/content/door-open-door-close-set
-License: CC0. Attribution: qubodup.
+Source: https://opengameart.org/content/door-open-door-close
+License: CC0. The page describes nine recordings of a room door opening and closing.
+
+- `19-oga-door-01-cc0.flac` through `27-oga-door-09-cc0.flac` — `door/door-01.flac` through `door/door-09.flac`
+
+### rubberduck — 100 CC0 metal and wood SFX
+
+Source: https://opengameart.org/content/100-cc0-metal-and-wood-sfx
+Author: rubberduck
+License: CC0
 
 - `28-oga-door-open-cc0.ogg` — `door_open_01.ogg`
 - `29-oga-wood-close-cc0.ogg` — `wood_close_01.ogg`
