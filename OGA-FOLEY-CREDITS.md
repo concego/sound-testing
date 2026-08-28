@@ -58,3 +58,27 @@ License: CC0
 ## Kevin MacLeod
 
 - `03-morning-kevin-macleod-cc-by4.mp3` — “Morning”, by Kevin MacLeod. Source: https://incompetech.com/music/royalty-free/music.html. License: Creative Commons Attribution 4.0. Preserve the required attribution in the game and its credits.
+
+
+## New candidates — interface/Radar
+
+### PWL — Bell dings/chimes
+
+Source: https://opengameart.org/content/bell-dingschimes
+Author: PWL
+License: CC0 / public domain.
+
+- `01-oga-bell-ding-1-cc0.wav` — `bell_ding1.wav`
+- `02-oga-bell-ding-2-cc0.wav` — `bell_ding2.wav`
+- `03-oga-bell-ding-3-cc0.wav` — `bell_ding3.wav`
+- `04-oga-bell-ding-4-cc0.wav` — `bell_ding4.wav`
+
+### qubodup — Click
+
+Source: https://opengameart.org/content/click
+Author: qubodup
+License: CC0.
+
+- `05-oga-click-cc0.wav` — `click.wav`
+
+These interface/Radar files are candidates only and are not approved yet.
