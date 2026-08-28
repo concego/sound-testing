@@ -1,10 +1,8 @@
 # OpenGameArt credits
 
-## Approved files
-
 The following OpenGameArt files were approved in Sound Testing on 2026-08-28.
 
-### OwlishMedia — Sound Effects Pack
+## OwlishMedia — Sound Effects Pack
 
 Source: https://opengameart.org/content/sound-effects-pack
 Author: OwlishMedia
@@ -17,7 +15,7 @@ License: CC0
 - `14-oga-cloth-blanket-movement-3-cc0.wav` — `Cloth, Rustle/320141__owlstorm__blanket-movement-3.wav`
 - `15-oga-impact-flip-cc0.wav` — `Impacts/flip.wav`
 
-### Spring Spring — Opening and Closing a Map Sounds
+## Spring Spring — Opening and Closing a Map Sounds
 
 Source: https://opengameart.org/content/opening-and-closing-a-map-sounds
 Author: Spring Spring / Spring Enterprises
@@ -25,29 +23,22 @@ License: CC0
 
 - `16-oga-paper-open-map-cc0.wav` — `snd_use_map.wav`
 
-### OpenGameArt wind files
-
-- `04-oga-short-wind-sound-cc0.wav` — “Short wind sound”, by remaxim. Source: https://opengameart.org/content/short-wind-sound. License: CC0.
-- `05-oga-mild-wind-background-cc0.wav` — “Mild Wind Background Noise”, by Bashar3A. Source: https://opengameart.org/content/mild-wind-background-noise. License: CC0. Preserve the attribution note to Bashar from Skirmish.io.
-- `06-oga-wind-whoosh-loop-cc0.ogg` — “wind whoosh loop”, by SketchMan3. Source: https://opengameart.org/content/wind-whoosh-loop. License: CC0.
-
-## New candidates — not approved yet
-
-### Luckius — Various Paper Sound Effects
+## Luckius — Various Paper Sound Effects
 
 Source: https://opengameart.org/content/various-paper-sound-effects
-License: CC0. The page says credit is appreciated but not mandatory.
+Author: Luckius
+License: CC0. Credit is appreciated but not mandatory.
 
 - `18-oga-paper-ripped-1-cc0.mp3` — `paper_ripped_-_1.mp3`
 
-### Iwan Gabovitch / qubodup — Door Open, Door Close
+## Iwan Gabovitch / qubodup — Door Open, Door Close
 
 Source: https://opengameart.org/content/door-open-door-close
 License: CC0. The page describes nine recordings of a room door opening and closing.
 
-- `19-oga-door-01-cc0.flac` through `27-oga-door-09-cc0.flac` — `door/door-01.flac` through `door/door-09.flac`
+- `21-oga-door-03-cc0.flac` — `door/door-03.flac`
 
-### rubberduck — 100 CC0 metal and wood SFX
+## rubberduck — 100 CC0 metal and wood SFX
 
 Source: https://opengameart.org/content/100-cc0-metal-and-wood-sfx
 Author: rubberduck
@@ -55,19 +46,14 @@ License: CC0
 
 - `28-oga-door-open-cc0.ogg` — `door_open_01.ogg`
 - `29-oga-wood-close-cc0.ogg` — `wood_close_01.ogg`
-- `30-oga-wood-hit-1-cc0.ogg` — `wood_hit_01.ogg`
 - `31-oga-wood-hit-2-cc0.ogg` — `wood_hit_02.ogg`
-- `32-oga-wood-squeak-1-cc0.ogg` — `wood_squeak_01.ogg`
 - `33-oga-wood-squeak-2-cc0.ogg` — `wood_squeak_02.ogg`
 
-### bart — Squeak toy sounds
+## OpenGameArt wind files
 
-Source: https://opengameart.org/content/squeak-toy-sounds
-License: CC0. Attribution appreciated.
-
-- `34-oga-rubber-squeak-1-cc0.wav` — `squeak toy - squeak1.wav`
-
-All files in the new batch remain candidates until explicitly approved in Sound Testing.
+- `04-oga-short-wind-sound-cc0.wav` — “Short wind sound”, by remaxim. Source: https://opengameart.org/content/short-wind-sound. License: CC0.
+- `05-oga-mild-wind-background-cc0.wav` — “Mild Wind Background Noise”, by Bashar3A. Source: https://opengameart.org/content/mild-wind-background-noise. License: CC0. Preserve the attribution note to Bashar from Skirmish.io.
+- `06-oga-wind-whoosh-loop-cc0.ogg` — “wind whoosh loop”, by SketchMan3. Source: https://opengameart.org/content/wind-whoosh-loop. License: CC0.
 
 ## Kevin MacLeod
 
